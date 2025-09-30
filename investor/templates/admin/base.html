@@ -1,0 +1,7 @@
+﻿{% extends "admin/base.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="{% static 'investor/js/admin_custom.js' %}"></script>
+{% endblock %}

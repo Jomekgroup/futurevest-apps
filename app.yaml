@@ -1,0 +1,9 @@
+runtime: python39
+
+entrypoint: gunicorn futurevest_project.wsgi
+
+handlers:
+  - url: /static
+    static_dir: staticfiles
+  - url: /.*
+    script: auto

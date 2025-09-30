@@ -1,0 +1,202 @@
+﻿{% extends 'investor/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Investor Signup</h4>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" placeholder="Enter your full name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phone_number" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="Enter your phone number without country code" required>
+                            <small class="text-muted">The country code will be automatically detected from your country selection</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="country" class="form-label">Country</label>
+                            <select class="form-select" id="country" name="country" required>
+                                <option value="">Select Country</option>
+                                <option value="Algeria (+213)">Algeria (+213)</option>
+                                <option value="Angola (+244)">Angola (+244)</option>
+                                <option value="Benin (+229)">Benin (+229)</option>
+                                <option value="Botswana (+267)">Botswana (+267)</option>
+                                <option value="Burkina Faso (+226)">Burkina Faso (+226)</option>
+                                <option value="Burundi (+257)">Burundi (+257)</option>
+                                <option value="Cabo Verde (+238)">Cabo Verde (+238)</option>
+                                <option value="Cameroon (+237)">Cameroon (+237)</option>
+                                <option value="Central African Republic (+236)">Central African Republic (+236)</option>
+                                <option value="Chad (+235)">Chad (+235)</option>
+                                <option value="Comoros (+269)">Comoros (+269)</option>
+                                <option value="Congo (+242)">Congo (+242)</option>
+                                <option value="DR Congo (+243)">DR Congo (+243)</option>
+                                <option value="Djibouti (+253)">Djibouti (+253)</option>
+                                <option value="Egypt (+20)">Egypt (+20)</option>
+                                <option value="Equatorial Guinea (+240)">Equatorial Guinea (+240)</option>
+                                <option value="Eritrea (+291)">Eritrea (+291)</option>
+                                <option value="Eswatini (+268)">Eswatini (+268)</option>
+                                <option value="Ethiopia (+251)">Ethiopia (+251)</option>
+                                <option value="Gabon (+241)">Gabon (+241)</option>
+                                <option value="Gambia (+220)">Gambia (+220)</option>
+                                <option value="Ghana (+233)">Ghana (+233)</option>
+                                <option value="Guinea (+224)">Guinea (+224)</option>
+                                <option value="Guinea-Bissau (+245)">Guinea-Bissau (+245)</option>
+                                <option value="Ivory Coast (+225)">Ivory Coast (+225)</option>
+                                <option value="Kenya (+254)">Kenya (+254)</option>
+                                <option value="Lesotho (+266)">Lesotho (+266)</option>
+                                <option value="Liberia (+231)">Liberia (+231)</option>
+                                <option value="Libya (+218)">Libya (+218)</option>
+                                <option value="Madagascar (+261)">Madagascar (+261)</option>
+                                <option value="Malawi (+265)">Malawi (+265)</option>
+                                <option value="Mali (+223)">Mali (+223)</option>
+                                <option value="Mauritania (+222)">Mauritania (+222)</option>
+                                <option value="Mauritius (+230)">Mauritius (+230)</option>
+                                <option value="Morocco (+212)">Morocco (+212)</option>
+                                <option value="Mozambique (+258)">Mozambique (+258)</option>
+                                <option value="Namibia (+264)">Namibia (+264)</option>
+                                <option value="Niger (+227)">Niger (+227)</option>
+                                <option value="Nigeria (+234)">Nigeria (+234)</option>
+                                <option value="Rwanda (+250)">Rwanda (+250)</option>
+                                <option value="Sao Tome and Principe (+239)">Sao Tome and Principe (+239)</option>
+                                <option value="Senegal (+221)">Senegal (+221)</option>
+                                <option value="Seychelles (+248)">Seychelles (+248)</option>
+                                <option value="Sierra Leone (+232)">Sierra Leone (+232)</option>
+                                <option value="Somalia (+252)">Somalia (+252)</option>
+                                <option value="South Africa (+27)">South Africa (+27)</option>
+                                <option value="South Sudan (+211)">South Sudan (+211)</option>
+                                <option value="Sudan (+249)">Sudan (+249)</option>
+                                <option value="Tanzania (+255)">Tanzania (+255)</option>
+                                <option value="Togo (+228)">Togo (+228)</option>
+                                <option value="Tunisia (+216)">Tunisia (+216)</option>
+                                <option value="Uganda (+256)">Uganda (+256)</option>
+                                <option value="Zambia (+260)">Zambia (+260)</option>
+                                <option value="Zimbabwe (+263)">Zimbabwe (+263)</option>
+                                <option value="Afghanistan (+93)">Afghanistan (+93)</option>
+                                <option value="Argentina (+54)">Argentina (+54)</option>
+                                <option value="Australia (+61)">Australia (+61)</option>
+                                <option value="Austria (+43)">Austria (+43)</option>
+                                <option value="Bangladesh (+880)">Bangladesh (+880)</option>
+                                <option value="Belgium (+32)">Belgium (+32)</option>
+                                <option value="Brazil (+55)">Brazil (+55)</option>
+                                <option value="Canada (+1)">Canada (+1)</option>
+                                <option value="Chile (+56)">Chile (+56)</option>
+                                <option value="China (+86)">China (+86)</option>
+                                <option value="Colombia (+57)">Colombia (+57)</option>
+                                <option value="Cuba (+53)">Cuba (+53)</option>
+                                <option value="Czech Republic (+420)">Czech Republic (+420)</option>
+                                <option value="Denmark (+45)">Denmark (+45)</option>
+                                <option value="Finland (+358)">Finland (+358)</option>
+                                <option value="France (+33)">France (+33)</option>
+                                <option value="Germany (+49)">Germany (+49)</option>
+                                <option value="Greece (+30)">Greece (+30)</option>
+                                <option value="India (+91)">India (+91)</option>
+                                <option value="Indonesia (+62)">Indonesia (+62)</option>
+                                <option value="Iran (+98)">Iran (+98)</option>
+                                <option value="Iraq (+964)">Iraq (+964)</option>
+                                <option value="Ireland (+353)">Ireland (+353)</option>
+                                <option value="Israel (+972)">Israel (+972)</option>
+                                <option value="Italy (+39)">Italy (+39)</option>
+                                <option value="Japan (+81)">Japan (+81)</option>
+                                <option value="Jordan (+962)">Jordan (+962)</option>
+                                <option value="Kazakhstan (+7)">Kazakhstan (+7)</option>
+                                <option value="Kuwait (+965)">Kuwait (+965)</option>
+                                <option value="Lebanon (+961)">Lebanon (+961)</option>
+                                <option value="Malaysia (+60)">Malaysia (+60)</option>
+                                <option value="Mexico (+52)">Mexico (+52)</option>
+                                <option value="Netherlands (+31)">Netherlands (+31)</option>
+                                <option value="New Zealand (+64)">New Zealand (+64)</option>
+                                <option value="Norway (+47)">Norway (+47)</option>
+                                <option value="Oman (+968)">Oman (+968)</option>
+                                <option value="Pakistan (+92)">Pakistan (+92)</option>
+                                <option value="Peru (+51)">Peru (+51)</option>
+                                <option value="Philippines (+63)">Philippines (+63)</option>
+                                <option value="Poland (+48)">Poland (+48)</option>
+                                <option value="Portugal (+351)">Portugal (+351)</option>
+                                <option value="Qatar (+974)">Qatar (+974)</option>
+                                <option value="Russia (+7)">Russia (+7)</option>
+                                <option value="Saudi Arabia (+966)">Saudi Arabia (+966)</option>
+                                <option value="Singapore (+65)">Singapore (+65)</option>
+                                <option value="South Korea (+82)">South Korea (+82)</option>
+                                <option value="Spain (+34)">Spain (+34)</option>
+                                <option value="Sweden (+46)">Sweden (+46)</option>
+                                <option value="Switzerland (+41)">Switzerland (+41)</option>
+                                <option value="Syria (+963)">Syria (+963)</option>
+                                <option value="Thailand (+66)">Thailand (+66)</option>
+                                <option value="Turkey (+90)">Turkey (+90)</option>
+                                <option value="Ukraine (+380)">Ukraine (+380)</option>
+                                <option value="United Arab Emirates (+971)">United Arab Emirates (+971)</option>
+                                <option value="United Kingdom (+44)">United Kingdom (+44)</option>
+                                <option value="Venezuela (+58)">Venezuela (+58)</option>
+                                <option value="Vietnam (+84)">Vietnam (+84)</option>
+                                <option value="Yemen (+967)">Yemen (+967)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password1" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password1" name="password1" placeholder="Enter password" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password2" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Create Account</button>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <p>Already have an account? <a href="{% url 'investor_login' %}">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// JavaScript to automatically format phone number with country code
+document.getElementById('country').addEventListener('change', function() {
+    const countrySelect = this;
+    const phoneInput = document.getElementById('phone_number');
+    const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+    
+    if (selectedOption.value && phoneInput.value) {
+        // Extract country code from the option text (e.g., "+233" from "Ghana (+233)")
+        const countryCodeMatch = selectedOption.text.match(/\((\+\d+)\)/);
+        if (countryCodeMatch) {
+            const countryCode = countryCodeMatch[1];
+            // Remove any existing country code from the phone number
+            let phoneNumber = phoneInput.value.replace(/^\+\d+\s?/, '');
+            // Format the phone number with country code
+            phoneInput.value = countryCode + ' ' + phoneNumber;
+        }
+    }
+});
+</script>
+{% endblock %}

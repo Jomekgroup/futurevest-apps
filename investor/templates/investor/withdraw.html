@@ -1,0 +1,68 @@
+{% extends 'investor/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Withdraw Funds</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Available for Withdrawal</label>
+                            <div class="alert alert-info">
+                                <h5 class="mb-0">${{ available_amount|floatformat:2 }}</h5>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount to Withdraw</label>
+                            <input type="number" class="form-control" id="amount" name="amount" min="10" step="0.01" max="{{ available_amount }}" required>
+                            {% if form.amount.errors %}
+                                <div class="text-danger">{{ form.amount.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="crypto_type" class="form-label">Select Crypto Currency</label>
+                            <select class="form-select" id="crypto_type" name="crypto_type" required>
+                                <option value="">Select Crypto</option>
+                                <option value="BTC">Bitcoin (BTC)</option>
+                                <option value="ETH">Ethereum (ETH)</option>
+                                <option value="USDT">USDT (Tether)</option>
+                            </select>
+                            {% if form.crypto_type.errors %}
+                                <div class="text-danger">{{ form.crypto_type.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="wallet_address" class="form-label">Your Crypto Wallet Address</label>
+                            <input type="text" class="form-control" id="wallet_address" name="wallet_address" required>
+                            {% if form.wallet_address.errors %}
+                                <div class="text-danger">{{ form.wallet_address.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Request Withdrawal</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

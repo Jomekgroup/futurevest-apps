@@ -1,0 +1,174 @@
+{% extends 'investor/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Make Investment</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount to Invest (Minimum  USD)</label>
+                            <input type="number" class="form-control" id="amount" name="amount" min="10" step="0.01" required>
+                            {% if form.amount.errors %}
+                                <div class="text-danger">{{ form.amount.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="crypto_type" class="form-label">Select Crypto Currency</label>
+                            <select class="form-select" id="crypto_type" name="crypto_type" required onchange="updateCryptoInfo()">
+                                <option value="">Select Crypto</option>
+                                <option value="BTC">Bitcoin (BTC)</option>
+                                <option value="ETH">Ethereum (ETH)</option>
+                                <option value="USDT">USDT (Tether)</option>
+                            </select>
+                            {% if form.crypto_type.errors %}
+                                <div class="text-danger">{{ form.crypto_type.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div id="crypto-info" class="mb-4" style="display: none;">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Payment Information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">FutureVest Crypto Address</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="crypto-address" readonly>
+                                            <button class="btn btn-outline-secondary" type="button" onclick="copyAddress()">
+                                                <i class="bi bi-clipboard"></i> Copy
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Crypto Network</label>
+                                        <input type="text" class="form-control" id="crypto-network" readonly>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">QR Code</label>
+                                        <div id="qr-code-container">
+                                            <img id="qr-code-image" src="" alt="QR Code" width="150" height="150" style="display: none;" onerror="this.style.display='none'; document.getElementById('qr-code-fallback').style.display='block';">
+                                            <div id="qr-code-fallback" style="display: none;">
+                                                <p class="text-muted">QR code image not available</p>
+                                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="showAddress()">
+                                                    Show Address Text
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="transaction_hash" class="form-label">Transaction Hash (Optional)</label>
+                            <input type="text" class="form-control" id="transaction_hash" name="transaction_hash" placeholder="Enter your transaction hash if available">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Submit Investment</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Crypto information from Django view
+    const cryptoInfo = {
+        'BTC': {
+            'address': '{{ crypto_info.BTC.address }}',
+            'network': '{{ crypto_info.BTC.network }}',
+            'qr_code': '{{ crypto_info.BTC.qr_code }}',
+            'online_qr': '{{ crypto_info.BTC.online_qr }}'
+        },
+        'ETH': {
+            'address': '{{ crypto_info.ETH.address }}',
+            'network': '{{ crypto_info.ETH.network }}',
+            'qr_code': '{{ crypto_info.ETH.qr_code }}',
+            'online_qr': '{{ crypto_info.ETH.online_qr }}'
+        },
+        'USDT': {
+            'address': '{{ crypto_info.USDT.address }}',
+            'network': '{{ crypto_info.USDT.network }}',
+            'qr_code': '{{ crypto_info.USDT.qr_code }}',
+            'online_qr': '{{ crypto_info.USDT.online_qr }}'
+        }
+    };
+
+    function updateCryptoInfo() {
+        const cryptoType = document.getElementById('crypto_type').value;
+        const cryptoInfoDiv = document.getElementById('crypto-info');
+        const qrImage = document.getElementById('qr-code-image');
+        const qrFallback = document.getElementById('qr-code-fallback');
+        
+        if (cryptoType && cryptoInfo[cryptoType]) {
+            cryptoInfoDiv.style.display = 'block';
+            
+            // Set crypto info based on selection
+            const info = cryptoInfo[cryptoType];
+            document.getElementById('crypto-address').value = info.address;
+            document.getElementById('crypto-network').value = info.network;
+            
+            // Try local QR code first, then online as fallback
+            qrImage.src = info.qr_code;
+            qrImage.style.display = 'block';
+            qrFallback.style.display = 'none';
+            
+            // If local image fails, it will trigger onerror and show fallback
+        } else {
+            cryptoInfoDiv.style.display = 'none';
+            qrImage.style.display = 'none';
+            qrFallback.style.display = 'none';
+        }
+    }
+    
+    function showAddress() {
+        const address = document.getElementById('crypto-address').value;
+        alert('Crypto Address: ' + address + '\n\nYou can copy this address manually for your transaction.');
+    }
+    
+    function copyAddress() {
+        const addressField = document.getElementById('crypto-address');
+        addressField.select();
+        document.execCommand('copy');
+        
+        // Show copied message
+        const copyButton = event.target;
+        const originalText = copyButton.innerHTML;
+        copyButton.innerHTML = '<i class="bi bi-check"></i> Copied!';
+        
+        setTimeout(() => {
+            copyButton.innerHTML = originalText;
+        }, 2000);
+    }
+
+    // Initialize on page load if a crypto type is already selected
+    document.addEventListener('DOMContentLoaded', function() {
+        const cryptoType = document.getElementById('crypto_type').value;
+        if (cryptoType) {
+            updateCryptoInfo();
+        }
+    });
+</script>
+{% endblock %}

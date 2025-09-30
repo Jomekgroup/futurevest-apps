@@ -1,0 +1,98 @@
+{% extends 'investor/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-4">Invest in the Future...</h1>
+        <p style="font-size:26px; color:#00FF00;"></h1>Earn 50% ROI every 30 days with secure crypto payments.</p> 
+        <p style="font-size:23px;"></h1>Artificial Inelligence . Autonomous Systems . Renewable Energy</p> 
+        <a href="{% url 'investor_signup' %}" class="btn btn-primary btn-lg">Get Started</a>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-12">
+                <h2 class="fw-bold">Why Choose FutureVest?</h2>
+                <p class="lead">We provide the best investment experience for our clients</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 text-center p-4">
+                    <i class="bi bi-shield-check display-4 text-primary mb-3"></i>
+                    <h4>Secure Investments</h4>
+                    <p>Your investments are protected with industry-leading security measures.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 text-center p-4">
+                    <i class="bi bi-graph-up-arrow display-4 text-primary mb-3"></i>
+                    <h4>Daily ROI</h4>
+                    <p>Earn daily returns on your investments with our proven strategies.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 text-center p-4">
+                    <i class="bi bi-currency-exchange display-4 text-primary mb-3"></i>
+                    <h4>Multiple Cryptos</h4>
+                    <p>Invest using Bitcoin, Ethereum, or USDT for maximum flexibility.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-12">
+                <h2 class="fw-bold">What Our Investors Say</h2>
+                <p class="lead">Hear from our successful investors worldwide</p>
+            </div>
+        </div>
+        <div class="row">
+            {% for testimonial in testimonials %}
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card text-center">
+                    <i class="bi bi-person-circle display-4 text-muted mb-3"></i>
+                    <h5>{{ testimonial.name }}</h5>
+                    <p class="text-muted">{{ testimonial.country }}</p>
+                    <p>"{{ testimonial.content }}"</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card text-center">
+                    <i class="bi bi-person-circle display-4 text-muted mb-3"></i>
+                    <h5>Robert Kimani</h5>
+                    <p class="text-muted">Kenya</p>
+                    <p>"I've increased my initial investment by 45% in just 3 months. The platform is easy to use and withdrawals are processed quickly."</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card text-center">
+                    <i class="bi bi-person-circle display-4 text-muted mb-3"></i>
+                    <h5>Sarah Chen</h5>
+                    <p class="text-muted">Singapore</p>
+                    <p>"The daily ROI is impressive and consistent. I appreciate the transparency and regular updates on my investment performance."</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="testimonial-card text-center">
+                    <i class="bi bi-person-circle display-4 text-muted mb-3"></i>
+                    <h5>James Okafor</h5>
+                    <p class="text-muted">Nigeria</p>
+                    <p>"FutureVest has been a game-changer for me. The referral program alone has generated significant additional income for my family."</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

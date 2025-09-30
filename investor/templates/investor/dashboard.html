@@ -1,0 +1,133 @@
+﻿{% extends 'investor/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <h2 class="fw-bold">Investment Dashboard</h2>
+            <p>Welcome back, {{ investor.user.first_name }}!</p>
+        </div>
+    </div>
+    
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <h6 class="text-muted">Total Invested</h6>
+                <h3>${{ total_invested|floatformat:2 }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <h6 class="text-muted">Daily ROI</h6>
+                <h3>${{ daily_roi|floatformat:2 }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <h6 class="text-muted">Total ROI</h6>
+                <h3>${{ total_roi|floatformat:2 }}</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-card text-center">
+                <h6 class="text-muted">Withdrawable</h6>
+                <h3>${{ total_withdrawable|floatformat:2 }}</h3>
+            </div>
+        </div>
+    </div>
+    
+    {% if pending_investments %}
+    <div class="row mb-4">
+        <div class="col-lg-12">
+            <div class="dashboard-card">
+                <h4 class="mb-4">Pending Investments</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Crypto Type</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for investment in pending_investments %}
+                            <tr>
+                                <td>{{ investment.date_invested|date:"M d, Y" }}</td>
+                                <td>${{ investment.amount|floatformat:2 }}</td>
+                                <td>{{ investment.get_crypto_type_display }}</td>
+                                <td>
+                                    <span class="badge bg-warning">Pending Approval</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="dashboard-card">
+                <h4 class="mb-4">Active Investments</h4>
+                
+                {% if investments %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Crypto Type</th>
+                                <th>Days Active</th>
+                                <th>ROI Earned</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for investment in investments %}
+                            <tr>
+                                <td>{{ investment.date_approved|date:"M d, Y" }}</td>
+                                <td>${{ investment.amount|floatformat:2 }}</td>
+                                <td>{{ investment.get_crypto_type_display }}</td>
+                                <td>{{ investment.days_since_investment }}</td>
+                                <td>${{ investment.total_roi|floatformat:2 }}</td>
+                                <td>
+                                    {% if investment.days_since_investment >= 30 %}
+                                        <span class="badge bg-success">Earning ROI</span>
+                                    {% else %}
+                                        <span class="badge bg-info">Vesting ({{ 30|subtract:investment.days_since_investment }} days left)</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="bi bi-wallet2 display-4 text-muted"></i>
+                    <h5 class="mt-3">No active investments yet</h5>
+                    <p>Start your investment journey by making your first investment.</p>
+                    <a href="{% url 'invest' %}" class="btn btn-primary">Make Investment</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-lg-12 text-center">
+            <a href="{% url 'invest' %}" class="btn btn-primary me-2">Invest</a>
+            <a href="{% url 'withdraw' %}" class="btn btn-outline-primary me-2">Withdraw</a>
+            <a href="{% url 'investor_logout' %}" class="btn btn-outline-secondary" id="logout-btn">Logout</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
